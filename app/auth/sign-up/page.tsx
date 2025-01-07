@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { set, useForm } from "react-hook-form";
 import { registerSchema } from "@/schema";
 import { useFormStatus } from "react-dom";
+import { registerUser } from "@/services/auth.services";
 
 const Signup: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -32,22 +33,14 @@ const Signup: React.FC = () => {
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     setLoading(true);
-    const response = await fetch("/api/auth/sign-up", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await registerUser(data);
 
-    const result = await response.json();
-
-    if (response.ok) {
-      console.log(result);
+    if (response) {
+      console.log(response.data);
       alert("Registered Successfully");
       setLoading(false);
     } else {
-      console.error(result);
+      console.error("Error");
       alert("Error: Please try again.");
     }
   };

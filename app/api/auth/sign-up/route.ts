@@ -28,9 +28,11 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error during registration:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    console.error("Error during registration:", errorMessage);
     return NextResponse.json(
-      { message: "Error: Registration failed", error: error },
+      { message: "Error: Registration failed", error: errorMessage },
       { status: 500 }
     );
   }
